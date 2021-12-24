@@ -39,9 +39,13 @@ public class GameController : MonoBehaviour
 
     // Spawn the players in the board
     void SpawnPlayers() {
-        GameObject go = Instantiate(playerPrefab);
-        player1 = go.GetComponent<Player>();
-        player1.Move(Board.Instance.GetRandomSquare().GetComponent<Square>());
-        cameraFollow.SetTarget(go);
+        GameObject go1 = Instantiate(playerPrefab);
+        player1 = go1.GetComponent<Player>();
+        player1.Spawn(Board.Instance.GetRandomSquare().GetComponent<Square>());
+        GameObject go2 = Instantiate(playerPrefab);
+        player2 = go2.GetComponent<Player>();
+        player2.Spawn(Board.Instance.GetRandomSquare().GetComponent<Square>());
+        player1.StartTurn();
+        cameraFollow.SetTarget(go1);
     }
 }

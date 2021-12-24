@@ -45,7 +45,11 @@ public class Board : MonoBehaviour {
 
     // Get a random square, to spawn the player
     public GameObject GetRandomSquare() {
-        return boardCache[Random.Range(0, cellSize)][Random.Range(0, cellSize)];
+        GameObject go = boardCache[Random.Range(0, cellSize)][Random.Range(0, cellSize)];
+        while (go.GetComponent<Square>().HasContent()) {
+            go = boardCache[Random.Range(0, cellSize)][Random.Range(0, cellSize)];
+        }
+        return go;
     }
 
     // Get a specific square by a coordinate
@@ -53,33 +57,39 @@ public class Board : MonoBehaviour {
         return boardCache[(int) squarePosition.x][(int) squarePosition.y];
     }
 
-    // Get the square neighborhood
-    GameObject[] GetNeighborhoods(Vector2 squarePosition) {
-        List<GameObject> neighborhoods = new List<GameObject>();
+    // Highlighted a specific square
+    void HighlightSquare(Vector2 squarePosition, bool enable) {
+        GameObject go = boardCache[(int)squarePosition.x][(int)squarePosition.y];
+
+        if (enable) {
+            if (!go.GetComponent<Square>().HasPlayer()) {
+                go.GetComponent<Square>().EnableMoveClick();
+            } else {
+                go.GetComponent<Square>().EnableAttackClick();
+            }
+        } else {
+            go.GetComponent<Square>().DisableAllClicks();
+        }
+    }
+
+    // Get the square neighborhoods and check if they can be highlighted
+    void HighlightNeighborhoodsSquares(Vector2 squarePosition, bool enable) {
         if (squarePosition.x > 0) {
-            neighborhoods.Add(GetSquare(new Vector2(squarePosition.x - 1, squarePosition.y)));
+            HighlightSquare(new Vector2(squarePosition.x - 1, squarePosition.y), enable);
         }
         if (squarePosition.x < cellSize - 1) {
-            neighborhoods.Add(GetSquare(new Vector2(squarePosition.x + 1, squarePosition.y)));
+            HighlightSquare(new Vector2(squarePosition.x + 1, squarePosition.y), enable);
         }
         if (squarePosition.y > 0) {
-            neighborhoods.Add(GetSquare(new Vector2(squarePosition.x, squarePosition.y - 1)));
+            HighlightSquare(new Vector2(squarePosition.x, squarePosition.y - 1), enable);
         }
         if (squarePosition.y < cellSize - 1) {
-            neighborhoods.Add(GetSquare(new Vector2(squarePosition.x, squarePosition.y + 1)));
+            HighlightSquare(new Vector2(squarePosition.x, squarePosition.y + 1), enable);
         }
-        return neighborhoods.ToArray();
     }
-    
+
     // Updates the neighborhoods squares click feedback
     public void HighlightSquares(Vector2 position, bool enable) {
-        GameObject[] neighborhoods = GetNeighborhoods(position);
-        for (int x = 0; x < neighborhoods.Length; x++) {
-            if (enable) {
-                neighborhoods[x].GetComponent<Square>().EnableClick();
-            } else {
-                neighborhoods[x].GetComponent<Square>().DisableClick();
-            }
-        }
+        HighlightNeighborhoodsSquares(position, enable);
     }
 }

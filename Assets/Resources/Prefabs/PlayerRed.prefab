@@ -889,7 +889,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3294e93619ef21548b5276a6fd7c5ad9, type: 2}
+  - {fileID: 2100000, guid: 6e7ebd4bbe886c54b9914005ddabd50b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -969,7 +969,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3294e93619ef21548b5276a6fd7c5ad9, type: 2}
+  - {fileID: 2100000, guid: 6e7ebd4bbe886c54b9914005ddabd50b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1155,6 +1155,7 @@ GameObject:
   - component: {fileID: 5270059250682540997}
   - component: {fileID: 5270059250690158157}
   - component: {fileID: 5627275343818718338}
+  - component: {fileID: -3039386504641940962}
   m_Layer: 0
   m_Name: PlayerRed
   m_TagString: Untagged
@@ -1188,64 +1189,12 @@ Animator:
   m_GameObject: {fileID: 5270059250682835457}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 555dddb0fd62c1a4a8a87449606cff55, type: 3}
-  m_Controller: {fileID: 9100000, guid: 0d2a25dfb60c5e4479a2490b7db6aba4, type: 2}
+  m_Controller: {fileID: 9100000, guid: a9cb4675db5720442a92e2e36b324efe, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
-  m_WarningMessage: '
-
-    Transform ''Bip001 L Toe0'' has been deleted
-
-    Transform
-    ''Bip001 L Foot'' has been deleted
-
-    Transform ''Bip001 L Calf'' has been
-    deleted
-
-    Transform ''Bip001 L Thigh'' has been deleted
-
-    Transform ''Bip001
-    R Toe0'' has been deleted
-
-    Transform ''Bip001 R Foot'' has been deleted
-
-    Transform
-    ''Bip001 R Calf'' has been deleted
-
-    Transform ''Bip001 R Thigh'' has been
-    deleted
-
-    Transform ''Bip001 L Hand'' has been deleted
-
-    Transform ''Bip001
-    L Forearm'' has been deleted
-
-    Transform ''Bip001 L UpperArm'' has been deleted
-
-    Transform
-    ''Bip001 L Clavicle'' has been deleted
-
-    Transform ''Bip001 Head'' has been
-    deleted
-
-    Transform ''Bip001 Neck'' has been deleted
-
-    Transform ''Bip001
-    R Hand'' has been deleted
-
-    Transform ''Bip001 R Forearm'' has been deleted
-
-    Transform
-    ''Bip001 R UpperArm'' has been deleted
-
-    Transform ''Bip001 R Clavicle'' has
-    been deleted
-
-    Transform ''Bip001 Spine'' has been deleted
-
-    Transform
-    ''Bip001 Pelvis'' has been deleted'
+  m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
@@ -1261,6 +1210,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7c60ece909f4804093cb536510886c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _animation: {fileID: -3039386504641940962}
+--- !u!114 &-3039386504641940962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5270059250682835457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc3e0b595b6c862489d74d1c0a8cd34a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 5270059250690158157}
 --- !u!1 &5270059250682839125
 GameObject:
   m_ObjectHideFlags: 0
