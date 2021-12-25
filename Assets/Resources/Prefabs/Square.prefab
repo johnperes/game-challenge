@@ -257,6 +257,7 @@ GameObject:
   - component: {fileID: 7746057403612751171}
   - component: {fileID: 5706497638172856057}
   - component: {fileID: 954654614674851017}
+  - component: {fileID: 822431439812177043}
   m_Layer: 5
   m_Name: MovementIndicator
   m_TagString: Untagged
@@ -319,6 +320,25 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!95 &822431439812177043
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3669786656656867401}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: bffb94e2d6b5dc242a424603f5d6b48a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &3907823052007299945
 GameObject:
   m_ObjectHideFlags: 0

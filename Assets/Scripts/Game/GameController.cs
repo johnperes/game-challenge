@@ -28,6 +28,7 @@ public class GameController : MonoBehaviour
     void Start() {
         Board.Instance.CreateBoard();
         SpawnPlayers();
+        SpawnCollectables();
     }
 
     void Update() {
@@ -61,6 +62,11 @@ public class GameController : MonoBehaviour
         player2.ActionMove += uiController.UpdateMovesLeft;
         // Start the turn
         ChangeTurn();
+    }
+
+    // Spawn the collectables in the board
+    void SpawnCollectables() {
+        Board.Instance.SpawnCollectables();
     }
 
     // Turn end

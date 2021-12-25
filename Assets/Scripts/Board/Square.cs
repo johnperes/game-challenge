@@ -64,7 +64,24 @@ public class Square : MonoBehaviour
         isOccupied = false;
         hasPlayer = false;
     }
-    
+
+    // Removes the square content
+    public void DestroyContent(PlayerAttributes attributes) {
+        if (content != null)
+        {
+            Collectable collectable = content.GetComponentInChildren<Collectable>();
+            if (collectable != null)
+            {
+                // Pick the collectable
+                collectable.Pick(attributes);
+                // Decreases the number of collectables available
+                Board.Instance.DecreaseCollectableNumber();
+            }
+            Destroy(content);
+        }
+        RemoveContent();
+    }
+
     // Check if has content
     public bool HasContent() {
         return isOccupied;

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,6 +18,9 @@ public class Board : MonoBehaviour {
     [SerializeField]
     [Tooltip("Number of squares in the board")]
     int cellSize = 1;
+
+    int totalCollectables = 0;
+    int currentCollectables = 0;
 
     // Stores the board squares to easily access the coordinates
     GameObject[][] boardCache;
@@ -45,9 +49,9 @@ public class Board : MonoBehaviour {
 
     // Get a random square, to spawn the player
     public GameObject GetRandomSquare() {
-        GameObject go = boardCache[Random.Range(0, cellSize)][Random.Range(0, cellSize)];
+        GameObject go = boardCache[UnityEngine.Random.Range(0, cellSize)][UnityEngine.Random.Range(0, cellSize)];
         while (go.GetComponent<Square>().HasContent()) {
-            go = boardCache[Random.Range(0, cellSize)][Random.Range(0, cellSize)];
+            go = boardCache[UnityEngine.Random.Range(0, cellSize)][UnityEngine.Random.Range(0, cellSize)];
         }
         return go;
     }
@@ -123,5 +127,52 @@ public class Board : MonoBehaviour {
             }
         }
         return Vector3.zero;
+    }
+
+    // Spawn collectables in all free spaces
+    public void SpawnCollectables() {
+        currentCollectables = (cellSize * cellSize) - 2;
+        totalCollectables = currentCollectables;
+        for (int x = 0; x < cellSize; x++) {
+            for (int y = 0; y < cellSize; y++) {
+                Square square = boardCache[x][y].GetComponent<Square>();
+                if (!square.HasContent()) {
+                    GameObject collectable;
+                    Collectable.CollectableType randomCollectable = (Collectable.CollectableType) UnityEngine.Random.Range(0, (int) Collectable.CollectableType.COUNT);
+                    switch (randomCollectable) {
+                        case Collectable.CollectableType.AttackPower:
+                            collectable = Instantiate(Resources.Load<GameObject>("Prefabs/Collectables/CollectableExtraAttack"));
+                            collectable.GetComponent<Collectable>().SetType(Collectable.CollectableType.AttackPower);
+                            break;
+                        case Collectable.CollectableType.ExtraDice:
+                            collectable = Instantiate(Resources.Load<GameObject>("Prefabs/Collectables/CollectableExtraDice"));
+                            collectable.GetComponent<Collectable>().SetType(Collectable.CollectableType.ExtraDice);
+                            break;
+                        case Collectable.CollectableType.ExtraMove:
+                            collectable = Instantiate(Resources.Load<GameObject>("Prefabs/Collectables/CollectableExtraMove"));
+                            collectable.GetComponent<Collectable>().SetType(Collectable.CollectableType.ExtraMove);
+                            break;
+                        case Collectable.CollectableType.Heal:
+                        default:
+                            collectable = Instantiate(Resources.Load<GameObject>("Prefabs/Collectables/CollectableHeal"));
+                            collectable.GetComponent<Collectable>().SetType(Collectable.CollectableType.Heal);
+                            break;
+                    }
+                    square.AddContent(collectable, false);
+                    collectable.transform.SetParent(square.transform);
+                    collectable.transform.localPosition = Vector3.zero;
+                }
+            }
+        }
+    }
+
+    public void DecreaseCollectableNumber() {
+        currentCollectables--;
+    }
+
+    private void Update() {
+        if (currentCollectables < totalCollectables * .1f) {
+            SpawnCollectables();
+        }
     }
 }

@@ -9,6 +9,10 @@ public class Player : MonoBehaviour
     public event Action<int> ActionMove;
 
     [SerializeField]
+    [Tooltip("Controls all players attributes")]
+    PlayerAttributes _attributes;
+
+    [SerializeField]
     [Tooltip("Controls all players animations")]
     PlayerAnimation _animation;
 
@@ -33,11 +37,6 @@ public class Player : MonoBehaviour
     // Player rotate target position
     Vector3 rotateTargetPosition;
 
-    // Player max moves per raound
-    [SerializeField]
-    int numberOfSteps = 3;
-
-
     // Move the player to a square in the board
     public void Spawn(Square target) {
         // Stores the player current position
@@ -49,9 +48,9 @@ public class Player : MonoBehaviour
     }
     
     public void StartTurn() {
-        // Reset the number of steps
-        numberOfSteps = 3;
-        ActionMove.Invoke(numberOfSteps);
+        // Reset the player attributes
+        _attributes.ResetTurn();
+        ActionMove.Invoke(_attributes.GetMoveCount());
         // Highlight the new nearby squares
         Board.Instance.HighlightSquares(currentSquare.GetCoordinates(), true);
     }
@@ -59,8 +58,8 @@ public class Player : MonoBehaviour
     // Continues the turn of the player
     void ContinueTurn() {
         // Decrease the number of steps
-        numberOfSteps--;
-        ActionMove.Invoke(numberOfSteps);
+        _attributes.DecreaseMoveCountForTurn();
+        ActionMove.Invoke(_attributes.GetMoveCount());
         // Highlight the new nearby squares
         Board.Instance.HighlightSquares(currentSquare.GetCoordinates(), true);
     }
@@ -99,7 +98,12 @@ public class Player : MonoBehaviour
         // Sets the player new parent and resets its local position
         transform.SetParent(currentSquare.gameObject.transform);
         transform.localPosition = Vector3.zero;
+        // Pick and destroys the contents of a square
+        currentSquare.DestroyContent(_attributes);
+        // Moves player to square
         currentSquare.AddContent(gameObject, true);
+        // Updates move count
+        ActionMove.Invoke(_attributes.GetMoveCount());
         // Starts idle animation
         _animation.Idle();
         // Check if nearby another player and attack
@@ -123,7 +127,7 @@ public class Player : MonoBehaviour
 
     // Checks the end of turn
     void CheckTurnEnd() {
-        if (numberOfSteps > 1) {
+        if (_attributes.GetMoveCount() > 1) {
             // Continue turn
             ContinueTurn();
         } else {

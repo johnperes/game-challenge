@@ -1156,6 +1156,7 @@ GameObject:
   - component: {fileID: 5270059250690158157}
   - component: {fileID: 5627275343818718338}
   - component: {fileID: -3039386504641940962}
+  - component: {fileID: -4418183828348567371}
   m_Layer: 0
   m_Name: PlayerRed
   m_TagString: Untagged
@@ -1210,6 +1211,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7c60ece909f4804093cb536510886c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _attributes: {fileID: -4418183828348567371}
   _animation: {fileID: -3039386504641940962}
 --- !u!114 &-3039386504641940962
 MonoBehaviour:
@@ -1224,6 +1226,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 5270059250690158157}
+--- !u!114 &-4418183828348567371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5270059250682835457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6bc5b58f3aeb724280b83e7799962b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 0
+  attack: 0
+  diceCount: 3
+  moveCount: 3
 --- !u!1 &5270059250682839125
 GameObject:
   m_ObjectHideFlags: 0
