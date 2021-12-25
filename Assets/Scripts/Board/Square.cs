@@ -24,7 +24,6 @@ public class Square : MonoBehaviour
     [Tooltip("Game Object with the attack indicator")]
     GameObject AttackIndicator;
 
-    bool canAttack = false;
     bool canClick = false;
     GameObject content;
     bool isOccupied = false;
@@ -83,16 +82,14 @@ public class Square : MonoBehaviour
     }
 
     // Disables the square click
-    public void DisableAllClicks() {
+    public void DisableMoveClick() {
         canClick = false;
-        canAttack = false;
         MovementIndicator.SetActive(false);
         AttackIndicator.SetActive(false);
     }
 
     // Makes the square clickable
-    public void EnableAttackClick() {
-        canAttack = true;
+    public void EnableAttackIndicator() {
         AttackIndicator.SetActive(true);
     }
 

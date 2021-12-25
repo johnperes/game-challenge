@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Board : MonoBehaviour {
 
+    // Singleton
     public static Board Instance { get; private set; }
-    void Awake()
-    {
+    void Awake() {
         Instance = this;
     }
 
@@ -60,15 +60,10 @@ public class Board : MonoBehaviour {
     // Highlighted a specific square
     void HighlightSquare(Vector2 squarePosition, bool enable) {
         GameObject go = boardCache[(int)squarePosition.x][(int)squarePosition.y];
-
-        if (enable) {
-            if (!go.GetComponent<Square>().HasPlayer()) {
-                go.GetComponent<Square>().EnableMoveClick();
-            } else {
-                go.GetComponent<Square>().EnableAttackClick();
-            }
+        if (enable && !go.GetComponent<Square>().HasPlayer()) {
+            go.GetComponent<Square>().EnableMoveClick();
         } else {
-            go.GetComponent<Square>().DisableAllClicks();
+            go.GetComponent<Square>().DisableMoveClick();
         }
     }
 
@@ -91,5 +86,42 @@ public class Board : MonoBehaviour {
     // Updates the neighborhoods squares click feedback
     public void HighlightSquares(Vector2 position, bool enable) {
         HighlightNeighborhoodsSquares(position, enable);
+    }
+
+    // Check if an attack action is about to happen
+    public Vector3 AttackPosition(Vector2 squarePosition) {
+        List<GameObject> nearbySquares = new List<GameObject>();
+        // Get all adjacent squares
+        if (squarePosition.x > 0 && squarePosition.y < cellSize - 1) {
+            nearbySquares.Add(GetSquare(new Vector2(squarePosition.x - 1, squarePosition.y + 1)));
+        }
+        if (squarePosition.y < cellSize - 1) {
+            nearbySquares.Add(GetSquare(new Vector2(squarePosition.x, squarePosition.y + 1)));
+        }
+        if (squarePosition.x < cellSize - 1 && squarePosition.y < cellSize - 1) {
+            nearbySquares.Add(GetSquare(new Vector2(squarePosition.x + 1, squarePosition.y + 1)));
+        }
+        if (squarePosition.x > 0) {
+            nearbySquares.Add(GetSquare(new Vector2(squarePosition.x - 1, squarePosition.y)));
+        }
+        if (squarePosition.x < cellSize - 1) {
+            nearbySquares.Add(GetSquare(new Vector2(squarePosition.x + 1, squarePosition.y)));
+        }
+        if (squarePosition.x > 0 && squarePosition.y > 0) {
+            nearbySquares.Add(GetSquare(new Vector2(squarePosition.x - 1, squarePosition.y - 1)));
+        }
+        if (squarePosition.y > 0) {
+            nearbySquares.Add(GetSquare(new Vector2(squarePosition.x, squarePosition.y - 1)));
+        }
+        if (squarePosition.x < cellSize - 1 && squarePosition.y > 0) {
+            nearbySquares.Add(GetSquare(new Vector2(squarePosition.x + 1, squarePosition.y - 1)));
+        }
+        // Check if there is a player in one of them
+        for (int x = 0; x < nearbySquares.Count; x++) {
+            if (nearbySquares[x].GetComponent<Square>().HasPlayer()) {
+                return nearbySquares[x].transform.position;
+            }
+        }
+        return Vector3.zero;
     }
 }
