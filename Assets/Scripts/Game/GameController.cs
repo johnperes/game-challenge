@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
+    public enum PlayerIndex { Player1, Player2 };
+
     public static GameController Instance { get; private set; }
     void Awake() {
         Instance = this;
@@ -40,8 +42,9 @@ public class GameController : MonoBehaviour
     }
 
     void Update() {
+        uiController.UpdatePlayerPanel(player1.attributes, player2.attributes);
         #region Check Player Click
-        if( Input.GetMouseButtonDown(0) ) {
+        if ( Input.GetMouseButtonDown(0) ) {
             Ray ray = Camera.main.ScreenPointToRay( Input.mousePosition );
             RaycastHit hit;
             if( Physics.Raycast( ray, out hit, 100 ) ) {
@@ -61,12 +64,12 @@ public class GameController : MonoBehaviour
         // Spawn player 1
         GameObject go1 = Instantiate(player1Prefab);
         player1 = go1.GetComponent<Player>();
-        player1.Spawn(Board.Instance.GetRandomSquare().GetComponent<Square>(), 1);
+        player1.Spawn(Board.Instance.GetRandomSquare().GetComponent<Square>(), PlayerIndex.Player1);
         player1.ActionMove += uiController.UpdateMovesLeft;
         // Spawn player 2
         GameObject go2 = Instantiate(player2Prefab);
         player2 = go2.GetComponent<Player>();
-        player2.Spawn(Board.Instance.GetRandomSquare().GetComponent<Square>(), 2);
+        player2.Spawn(Board.Instance.GetRandomSquare().GetComponent<Square>(), PlayerIndex.Player2);
         player2.ActionMove += uiController.UpdateMovesLeft;
         // Start the turn
         ChangeTurn();
@@ -91,5 +94,9 @@ public class GameController : MonoBehaviour
         activePlayer.StartTurn();
         // Sets the new camera target
         cameraFollow.SetTarget(activePlayer.gameObject);
+    }
+
+    public void FinishGame(PlayerIndex winner) {
+        uiController.DisplayEndGameScreen(winner);
     }
 }

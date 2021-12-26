@@ -103,7 +103,7 @@ public class PlayerAttributes : MonoBehaviour
         health += value;
         if (health > maxHealth)
         {
-            maxHealth = health;
+            health = maxHealth;
         }
     }
 

@@ -38,10 +38,10 @@ public class Player : MonoBehaviour
     Vector3 rotateTargetPosition;
 
     // Player index, identifies if its the player 1 or 2
-    int playerIndex;
+    GameController.PlayerIndex playerIndex;
 
     // Move the player to a square in the board
-    public void Spawn(Square target, int index) {
+    public void Spawn(Square target, GameController.PlayerIndex index) {
         // Stores the player index (1, 2)
         playerIndex = index;
         // Stores the player current position
@@ -126,10 +126,10 @@ public class Player : MonoBehaviour
     // Attack cancel
     public void AttackCancel() {
         isAttacking = false;
-        if (playerIndex == 1) {
-            BattleManager.Instance.StartBattlePhase(attributes.GetDiceCount(), 3);
+        if (playerIndex == GameController.PlayerIndex.Player1) {
+            BattleManager.Instance.StartBattlePhase(attributes.GetDiceCount(), 3, playerIndex);
         } else {
-            BattleManager.Instance.StartBattlePhase(3, attributes.GetDiceCount());
+            BattleManager.Instance.StartBattlePhase(3, attributes.GetDiceCount(), playerIndex);
         }
         StartCoroutine("CheckTurnEnd");
     }

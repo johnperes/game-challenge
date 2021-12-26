@@ -19,6 +19,24 @@ public class UIController : MonoBehaviour
     Color disabledColor;
 
     [SerializeField]
+    [Tooltip("Indicates the moves left for player 1")]
+    TMP_Text player1MoveCounterLabel;
+
+    [SerializeField]
+    [Tooltip("Indicates the moves left for player 2")]
+    TMP_Text player2MoveCounterLabel;
+
+    [SerializeField]
+    [Tooltip("End game screen")]
+    GameObject endGameScreen;
+
+    [SerializeField]
+    [Tooltip("End game screen announcement")]
+    TMP_Text endGameScreenAnnouncementLabel;
+
+    [Header("Player's Panel")]
+
+    [SerializeField]
     [Tooltip("Player 1 UI Panel")]
     Image player1Panel;
 
@@ -26,13 +44,31 @@ public class UIController : MonoBehaviour
     [Tooltip("Player 2 UI Panel")]
     Image player2Panel;
 
-    [SerializeField]
-    [Tooltip("Indicates the moves left for player 1")]
-    TMP_Text player1MoveCounterLabel;
+    [Header("Player's Panel Labels")]
 
     [SerializeField]
-    [Tooltip("Indicates the moves left for player 2")]
-    TMP_Text player2MoveCounterLabel;
+    [Tooltip("Player 1 Health")]
+    TMP_Text player1HealthLabel;
+
+    [SerializeField]
+    [Tooltip("Player 2 Health")]
+    TMP_Text player2HealthLabel;
+
+    [SerializeField]
+    [Tooltip("Player 1 Attack")]
+    TMP_Text player1AttackLabel;
+
+    [SerializeField]
+    [Tooltip("Player 2 Attack")]
+    TMP_Text player2AttackLabel;
+
+    [SerializeField]
+    [Tooltip("Player 1 Dice")]
+    TMP_Text player1DiceLabel;
+
+    [SerializeField]
+    [Tooltip("Player 2 Dice")]
+    TMP_Text player2DiceLabel;
 
     // Enables player 1 turn in GUI, then disables the player 2 indicators
     public void EnablePlayer1() {
@@ -54,5 +90,24 @@ public class UIController : MonoBehaviour
     public void UpdateMovesLeft(int value) {
         player1MoveCounterLabel.text = value.ToString();
         player2MoveCounterLabel.text = value.ToString();
+    }
+
+    public void UpdatePlayerPanel(PlayerAttributes p1Attr, PlayerAttributes p2Attr) {
+        player1HealthLabel.text = p1Attr.GetHealth().ToString();
+        player1AttackLabel.text = p1Attr.GetAttack().ToString();
+        player1DiceLabel.text = p1Attr.GetDiceCount().ToString();
+        player2HealthLabel.text = p2Attr.GetHealth().ToString();
+        player2AttackLabel.text = p2Attr.GetAttack().ToString();
+        player2DiceLabel.text = p2Attr.GetDiceCount().ToString();
+    }
+
+    // Displays the end game screen and result
+    public void DisplayEndGameScreen(GameController.PlayerIndex winner) {
+        if (winner == GameController.PlayerIndex.Player1) {
+            endGameScreenAnnouncementLabel.text = "Player 1 wins the game!";
+        } else {
+            endGameScreenAnnouncementLabel.text = "Player 2 wins the game!";
+        }
+        endGameScreen.SetActive(true);
     }
 }
