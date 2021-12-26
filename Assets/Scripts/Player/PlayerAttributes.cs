@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerAttributes : MonoBehaviour
 {
     // Current health
+    [SerializeField]
     int health;
 
     [SerializeField]
@@ -27,6 +28,10 @@ public class PlayerAttributes : MonoBehaviour
     int moveCount = 3;
     int moveCountBuff = 0;
     int movesUsed = 0;
+
+    private void Start() {
+        health = maxHealth;
+    }
 
     // Gets current health
     public int GetHealth()

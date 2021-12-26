@@ -17,13 +17,21 @@ public class GameController : MonoBehaviour
     CameraFollow cameraFollow;
 
     [SerializeField]
-    [Tooltip("Player prefab")]
-    GameObject playerPrefab;
+    [Tooltip("Player 1 prefab")]
+    GameObject player1Prefab;
+
+    [SerializeField]
+    [Tooltip("Player 2 prefab")]
+    GameObject player2Prefab;
 
     // Players reference
     Player activePlayer;
-    Player player1;
-    Player player2;
+
+    [HideInInspector]
+    public Player player1;
+
+    [HideInInspector]
+    public Player player2;
 
     void Start() {
         Board.Instance.CreateBoard();
@@ -51,14 +59,14 @@ public class GameController : MonoBehaviour
     // Spawn the players in the board
     void SpawnPlayers() {
         // Spawn player 1
-        GameObject go1 = Instantiate(playerPrefab);
+        GameObject go1 = Instantiate(player1Prefab);
         player1 = go1.GetComponent<Player>();
-        player1.Spawn(Board.Instance.GetRandomSquare().GetComponent<Square>());
+        player1.Spawn(Board.Instance.GetRandomSquare().GetComponent<Square>(), 1);
         player1.ActionMove += uiController.UpdateMovesLeft;
         // Spawn player 2
-        GameObject go2 = Instantiate(playerPrefab);
+        GameObject go2 = Instantiate(player2Prefab);
         player2 = go2.GetComponent<Player>();
-        player2.Spawn(Board.Instance.GetRandomSquare().GetComponent<Square>());
+        player2.Spawn(Board.Instance.GetRandomSquare().GetComponent<Square>(), 2);
         player2.ActionMove += uiController.UpdateMovesLeft;
         // Start the turn
         ChangeTurn();

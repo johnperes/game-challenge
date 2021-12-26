@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     [Tooltip("Controls all players attributes")]
-    PlayerAttributes _attributes;
+    public PlayerAttributes attributes;
 
     [SerializeField]
     [Tooltip("Controls all players animations")]
@@ -37,8 +37,13 @@ public class Player : MonoBehaviour
     // Player rotate target position
     Vector3 rotateTargetPosition;
 
+    // Player index, identifies if its the player 1 or 2
+    int playerIndex;
+
     // Move the player to a square in the board
-    public void Spawn(Square target) {
+    public void Spawn(Square target, int index) {
+        // Stores the player index (1, 2)
+        playerIndex = index;
         // Stores the player current position
         currentSquare = target;
         // Just puts the player in the square, without animation
@@ -49,8 +54,8 @@ public class Player : MonoBehaviour
     
     public void StartTurn() {
         // Reset the player attributes
-        _attributes.ResetTurn();
-        ActionMove.Invoke(_attributes.GetMoveCount());
+        attributes.ResetTurn();
+        ActionMove.Invoke(attributes.GetMoveCount());
         // Highlight the new nearby squares
         Board.Instance.HighlightSquares(currentSquare.GetCoordinates(), true);
     }
@@ -58,8 +63,8 @@ public class Player : MonoBehaviour
     // Continues the turn of the player
     void ContinueTurn() {
         // Decrease the number of steps
-        _attributes.DecreaseMoveCountForTurn();
-        ActionMove.Invoke(_attributes.GetMoveCount());
+        attributes.DecreaseMoveCountForTurn();
+        ActionMove.Invoke(attributes.GetMoveCount());
         // Highlight the new nearby squares
         Board.Instance.HighlightSquares(currentSquare.GetCoordinates(), true);
     }
@@ -90,7 +95,6 @@ public class Player : MonoBehaviour
         isAttacking = true;
     }
 
-
     // Ends the movement of the player
     void MoveEnd() {
         // Finish the movement
@@ -99,11 +103,11 @@ public class Player : MonoBehaviour
         transform.SetParent(currentSquare.gameObject.transform);
         transform.localPosition = Vector3.zero;
         // Pick and destroys the contents of a square
-        currentSquare.DestroyContent(_attributes);
+        currentSquare.DestroyContent(attributes);
         // Moves player to square
         currentSquare.AddContent(gameObject, true);
         // Updates move count
-        ActionMove.Invoke(_attributes.GetMoveCount());
+        ActionMove.Invoke(attributes.GetMoveCount());
         // Starts idle animation
         _animation.Idle();
         // Check if nearby another player and attack
@@ -115,19 +119,26 @@ public class Player : MonoBehaviour
             rotateTargetPosition = attackPosition;
         } else
         {
-            CheckTurnEnd();
+            StartCoroutine("CheckTurnEnd");
         }
     }
 
     // Attack cancel
     public void AttackCancel() {
         isAttacking = false;
-        CheckTurnEnd();
+        if (playerIndex == 1) {
+            BattleManager.Instance.StartBattlePhase(attributes.GetDiceCount(), 3);
+        } else {
+            BattleManager.Instance.StartBattlePhase(3, attributes.GetDiceCount());
+        }
+        StartCoroutine("CheckTurnEnd");
     }
 
     // Checks the end of turn
-    void CheckTurnEnd() {
-        if (_attributes.GetMoveCount() > 1) {
+    IEnumerator CheckTurnEnd() {
+        // Waits until the battle ends
+        yield return new WaitUntil(() => !BattleManager.Instance.IsBattleInProgress());
+        if (attributes.GetMoveCount() > 1) {
             // Continue turn
             ContinueTurn();
         } else {
