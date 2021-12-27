@@ -34,82 +34,72 @@ public class PlayerAttributes : MonoBehaviour
     }
 
     // Gets current health
-    public int GetHealth()
-    {
+    public int GetHealth() {
         return health;
     }
 
     // Gets current health
-    public int GetAttack()
-    {
+    public int GetAttack() {
         return attack + attackBuff;
     }
 
     // Gets current dice count
-    public int GetDiceCount()
-    {
+    public int GetDiceCount() {
         return diceCount + diceCountBuff - dicesUsed;
     }
 
     // Gets current move count
-    public int GetMoveCount()
-    {
+    public int GetMoveCount() {
         return moveCount + moveCountBuff - movesUsed;
     }
 
     // Damages the player
-    public void GetHit(int value)
-    {
+    public void GetHit(int value) {
+        Debug.Log("Get hit called");
         health -= value;
         if (health < 0)
         {
             health = 0;
         }
+        // Plays the particle effect
+        EffectController.Instance.PlayGetHit(transform.position);
     }
 
     // Decreases current turn dice count
-    public void DecreaseDiceCountForTurn()
-    {
+    public void DecreaseDiceCountForTurn() {
         dicesUsed++;
     }
 
     // Decreases current turn move count
-    public void DecreaseMoveCountForTurn()
-    {
+    public void DecreaseMoveCountForTurn() {
         movesUsed++;
     }
 
     // Adds attack for the rest of the turn
-    public void AttackBuff(int value)
-    {
+    public void AttackBuff(int value) {
         attackBuff += value;
     }
 
     // Adds extra dices for the rest of the turn
-    public void DiceBuff(int value)
-    {
+    public void DiceBuff(int value) {
         diceCountBuff += value;
     }
 
     // Adds extra movement for the rest of the turn
-    public void MovementBuff(int value)
-    {
+    public void MovementBuff(int value) {
         moveCountBuff += value;
     }
 
     // Heals the player
-    public void Heal(int value)
-    {
+    public void Heal(int value) {
         health += value;
-        if (health > maxHealth)
-        {
+        if (health > maxHealth) {
             health = maxHealth;
         }
     }
 
     // Resets counters for the turn end
-    public void ResetTurn()
-    {
+    public void ResetTurn() {
         attackBuff = 0;
         diceCountBuff = 0;
         moveCountBuff = 0;

@@ -10,17 +10,26 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     [Tooltip("Controls all players attributes")]
-    public PlayerAttributes attributes;
+    PlayerAttributes _attributes;
+
+    public PlayerAttributes GetAttributes() {
+        return _attributes;
+    }
 
     [SerializeField]
     [Tooltip("Controls all players animations")]
     PlayerAnimation _animation;
 
+    public PlayerAnimation GetAnimation()
+    {
+        return _animation;
+    }
+
     // Current player square
     Square currentSquare;
 
     // Player walk speed
-    float speed = 3f;
+    float speed = 1.75f;
 
     // Player rotation speed
     float rotationSpeed = 35f;
@@ -54,8 +63,7 @@ public class Player : MonoBehaviour
     
     public void StartTurn() {
         // Reset the player attributes
-        attributes.ResetTurn();
-        ActionMove.Invoke(attributes.GetMoveCount());
+        ActionMove.Invoke(_attributes.GetMoveCount());
         // Highlight the new nearby squares
         Board.Instance.HighlightSquares(currentSquare.GetCoordinates(), true);
     }
@@ -63,8 +71,8 @@ public class Player : MonoBehaviour
     // Continues the turn of the player
     void ContinueTurn() {
         // Decrease the number of steps
-        attributes.DecreaseMoveCountForTurn();
-        ActionMove.Invoke(attributes.GetMoveCount());
+        _attributes.DecreaseMoveCountForTurn();
+        ActionMove.Invoke(_attributes.GetMoveCount());
         // Highlight the new nearby squares
         Board.Instance.HighlightSquares(currentSquare.GetCoordinates(), true);
     }
@@ -85,6 +93,10 @@ public class Player : MonoBehaviour
         currentSquare = target;
         // Starts walk animation
         _animation.Walk();
+        // Plays particle effect
+        EffectController.Instance.PlayWalk(currentSquare.gameObject.transform.position, Quaternion.LookRotation((transform.position - rotateTargetPosition).normalized));
+        // Plays the sound effect
+        AudioController.Instance.Play(AudioController.AudioType.Walk);
     }
 
     // Attacks the other player
@@ -103,18 +115,20 @@ public class Player : MonoBehaviour
         transform.SetParent(currentSquare.gameObject.transform);
         transform.localPosition = Vector3.zero;
         // Pick and destroys the contents of a square
-        currentSquare.DestroyContent(attributes);
+        currentSquare.DestroyContent(_attributes);
         // Moves player to square
         currentSquare.AddContent(gameObject, true);
         // Updates move count
-        ActionMove.Invoke(attributes.GetMoveCount());
+        ActionMove.Invoke(_attributes.GetMoveCount());
         // Starts idle animation
         _animation.Idle();
         // Check if nearby another player and attack
         Vector3 attackPosition = Board.Instance.AttackPosition(currentSquare.GetCoordinates());
-        if (attackPosition != Vector3.zero) {
+        if (attackPosition != new Vector3(-100, -100, -100)) {
             // Starts attack animation
             Attack();
+            // Plays the sound effect
+            AudioController.Instance.Play(AudioController.AudioType.BattleStart);
             // Rotates towards target
             rotateTargetPosition = attackPosition;
         } else
@@ -127,9 +141,9 @@ public class Player : MonoBehaviour
     public void AttackCancel() {
         isAttacking = false;
         if (playerIndex == GameController.PlayerIndex.Player1) {
-            BattleManager.Instance.StartBattlePhase(attributes.GetDiceCount(), 3, playerIndex);
+            BattleManager.Instance.StartBattlePhase(_attributes.GetDiceCount(), 3, playerIndex);
         } else {
-            BattleManager.Instance.StartBattlePhase(3, attributes.GetDiceCount(), playerIndex);
+            BattleManager.Instance.StartBattlePhase(3, _attributes.GetDiceCount(), playerIndex);
         }
         StartCoroutine("CheckTurnEnd");
     }
@@ -138,13 +152,15 @@ public class Player : MonoBehaviour
     IEnumerator CheckTurnEnd() {
         // Waits until the battle ends
         yield return new WaitUntil(() => !BattleManager.Instance.IsBattleInProgress());
-        if (attributes.GetMoveCount() > 1) {
+        if (_attributes.GetMoveCount() > 1) {
             // Continue turn
             ContinueTurn();
         } else {
             // End the turn
             Board.Instance.HighlightSquares(currentSquare.GetCoordinates(), false);
             GameController.Instance.ChangeTurn();
+            // Reset the player attributes
+            _attributes.ResetTurn();
         }
     }
 

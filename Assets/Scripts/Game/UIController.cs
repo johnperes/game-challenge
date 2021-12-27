@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
@@ -92,6 +93,7 @@ public class UIController : MonoBehaviour
         player2MoveCounterLabel.text = value.ToString();
     }
 
+    // Updates the players GUI
     public void UpdatePlayerPanel(PlayerAttributes p1Attr, PlayerAttributes p2Attr) {
         player1HealthLabel.text = p1Attr.GetHealth().ToString();
         player1AttackLabel.text = p1Attr.GetAttack().ToString();
@@ -109,5 +111,9 @@ public class UIController : MonoBehaviour
             endGameScreenAnnouncementLabel.text = "Player 2 wins the game!";
         }
         endGameScreen.SetActive(true);
+    }
+
+    public void BackToMenu() {
+        SceneManager.LoadScene("Menu");
     }
 }

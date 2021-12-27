@@ -20,10 +20,6 @@ public class Square : MonoBehaviour
     [Tooltip("Game Object with the movement indicator")]
     GameObject MovementIndicator;
 
-    [SerializeField]
-    [Tooltip("Game Object with the attack indicator")]
-    GameObject AttackIndicator;
-
     bool canClick = false;
     GameObject content;
     bool isOccupied = false;
@@ -102,12 +98,6 @@ public class Square : MonoBehaviour
     public void DisableMoveClick() {
         canClick = false;
         MovementIndicator.SetActive(false);
-        AttackIndicator.SetActive(false);
-    }
-
-    // Makes the square clickable
-    public void EnableAttackIndicator() {
-        AttackIndicator.SetActive(true);
     }
 
     // Check if the square is clickable

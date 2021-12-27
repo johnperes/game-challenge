@@ -72,6 +72,8 @@ public class BattleManager : MonoBehaviour
     // Starts the battle phase
     public void StartBattlePhase(int player1DiceCountParam, int player2DiceCountParam, GameController.PlayerIndex playerTurn) {
         currentPlayerTurn = playerTurn;
+        // Activates the dice
+        dice.gameObject.SetActive(true);
         // Resets the battle phase data
         announcementPanel.SetActive(false);
         announcementLabel.text = "";
@@ -123,6 +125,7 @@ public class BattleManager : MonoBehaviour
             player2DiceCount--;
             go.transform.SetParent(player2DiceContainer.transform);
         }
+        go.transform.localScale = new Vector3(1f, 1f, 1f);
         // Swaps between player when one runs out of dice rolls
         if (player1DiceCount == 0) {
             player1Turn = false;
@@ -130,6 +133,8 @@ public class BattleManager : MonoBehaviour
         // Continue to roll until all players have remaining rolls, if not it ends the battle coroutine
         if (player1DiceCount > 0 || player2DiceCount > 0) {
             StartCoroutine("BattleCoroutine");
+            // Plays the sound effect
+            AudioController.Instance.Play(AudioController.AudioType.DiceFinish);
         } else {
             StartCoroutine("EndBattleCoroutine");
         }
@@ -155,25 +160,35 @@ public class BattleManager : MonoBehaviour
     // Finish the battle phase
     IEnumerator EndBattleCoroutine() {
         CheckWinner();
-        // Applies the attack of the winner player to the other, and updates the announcement
+        // Updates the announcement
         announcementPanel.SetActive(true);
         announcementPlayerScore.text = player1Score.ToString() + " x " + player2Score.ToString();
         if (player1Score > player2Score) {
-            GameController.Instance.player2.attributes.GetHit(GameController.Instance.player1.attributes.GetAttack());
             announcementLabel.text = "Player 1 wins!";
         } else {
-            GameController.Instance.player1.attributes.GetHit(GameController.Instance.player2.attributes.GetAttack());
             announcementLabel.text = "Player 2 wins!";
         }
+        // Plays the sound effect
+        AudioController.Instance.Play(AudioController.AudioType.HitPlayer);
         // Waits for 2 seconds, so the players have time to read, then finish the battle phase
         yield return new WaitForSeconds(2);
-        // Check if game ended
-        if (GameController.Instance.player1.attributes.GetHealth() == 0) {
-            GameController.Instance.FinishGame(GameController.PlayerIndex.Player2);
-        } else if (GameController.Instance.player2.attributes.GetHealth() == 0) {
-            GameController.Instance.FinishGame(GameController.PlayerIndex.Player1);
-        }
         battleUI.SetActive(false);
         battleInProgress = false;
+        // Plays the sound effect
+        AudioController.Instance.Play(AudioController.AudioType.BattleEnd);
+        // Applies the attack of the winner player to the other
+        if (player1Score > player2Score) {
+            GameController.Instance.player2.GetAttributes().GetHit(GameController.Instance.player1.GetAttributes().GetAttack());
+            GameController.Instance.player2.GetAnimation().GetHit();
+        } else {
+            GameController.Instance.player1.GetAttributes().GetHit(GameController.Instance.player2.GetAttributes().GetAttack());
+            GameController.Instance.player1.GetAnimation().GetHit();
+        }
+        // Check if game ended
+        if (GameController.Instance.player1.GetAttributes().GetHealth() == 0) {
+            GameController.Instance.FinishGame(GameController.PlayerIndex.Player2);
+        } else if (GameController.Instance.player2.GetAttributes().GetHealth() == 0) {
+            GameController.Instance.FinishGame(GameController.PlayerIndex.Player1);
+        }
     }
 }

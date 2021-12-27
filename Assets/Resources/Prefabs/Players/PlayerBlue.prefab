@@ -1211,7 +1211,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7c60ece909f4804093cb536510886c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attributes: {fileID: 7378053313782494818}
+  _attributes: {fileID: 7378053313782494818}
   _animation: {fileID: -4247051299350397698}
 --- !u!114 &-4247051299350397698
 MonoBehaviour:
@@ -1239,7 +1239,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 0
-  maxHealth: 10
+  maxHealth: 9
   attack: 2
   diceCount: 3
   moveCount: 3

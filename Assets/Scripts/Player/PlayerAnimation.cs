@@ -18,4 +18,8 @@ public class PlayerAnimation : MonoBehaviour
     public void Attack() {
         animator.SetTrigger("Attack");
     }
+    public void GetHit()
+    {
+        animator.SetTrigger("GetHit");
+    }
 }

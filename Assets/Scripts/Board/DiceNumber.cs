@@ -10,13 +10,12 @@ public class DiceNumber : MonoBehaviour
 
     int value;
 
-    public void SetValue(int param)
-    {
+    public void SetValue(int param) {
         value = param;
         labelValue.text = param.ToString();
     }
-    public int GetValue()
-    {
+
+    public int GetValue() {
         return value;
     }
 }

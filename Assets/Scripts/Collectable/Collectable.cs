@@ -30,5 +30,9 @@ public class Collectable : MonoBehaviour
                 playerAttributes.Heal(quantity);
                 break;
         }
+        // Plays the particle effect
+        EffectController.Instance.PlayItemGet(transform.position);
+        // Plays the sound effect
+        AudioController.Instance.Play(AudioController.AudioType.GetItem);
     }
 }

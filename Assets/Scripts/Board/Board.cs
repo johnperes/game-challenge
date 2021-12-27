@@ -126,7 +126,7 @@ public class Board : MonoBehaviour {
                 return nearbySquares[x].transform.position;
             }
         }
-        return Vector3.zero;
+        return new Vector3(-100, -100, -100);
     }
 
     // Spawn collectables in all free spaces
@@ -166,11 +166,13 @@ public class Board : MonoBehaviour {
         }
     }
 
+    // Decrease the number of collectables
     public void DecreaseCollectableNumber() {
         currentCollectables--;
     }
 
     private void Update() {
+        // Spawn collectables when less than 10%
         if (currentCollectables < totalCollectables * .1f) {
             SpawnCollectables();
         }

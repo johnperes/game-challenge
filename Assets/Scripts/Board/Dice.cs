@@ -45,6 +45,8 @@ public class Dice : MonoBehaviour {
 
 	bool isRolling = false;
 
+	bool particleCollision = true;
+
 	// Roll the dice randomly
 	public void Launch() {
 		currentValue = 0;
@@ -87,5 +89,22 @@ public class Dice : MonoBehaviour {
 	// Changes the dice material, do differentiate between players
 	public void ChangeMaterial(Material mat) {
 		GetComponent<MeshRenderer>().material = mat;
+	}
+
+    void OnCollisionEnter(Collision collision) {
+		if (particleCollision) {
+			particleCollision = false;
+			// Plays particle effect
+			EffectController.Instance.PlayDiceCollide(collision.GetContact(0).point);
+			// Spawns particles on collision, with a 2 secs delay interval
+			Invoke("ResetParticleCollision", 2f);
+		}
+		// Plays the sound effect
+		AudioController.Instance.Play(AudioController.AudioType.DiceHit);
+	}
+
+	// Resets the particle displayed when the dice collides
+	void ResetParticleCollision() {
+		particleCollision = true;
 	}
 }

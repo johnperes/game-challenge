@@ -18,14 +18,6 @@ public class GameController : MonoBehaviour
     [Tooltip("Script to the camera to follow the players")]
     CameraFollow cameraFollow;
 
-    [SerializeField]
-    [Tooltip("Player 1 prefab")]
-    GameObject player1Prefab;
-
-    [SerializeField]
-    [Tooltip("Player 2 prefab")]
-    GameObject player2Prefab;
-
     // Players reference
     Player activePlayer;
 
@@ -42,7 +34,7 @@ public class GameController : MonoBehaviour
     }
 
     void Update() {
-        uiController.UpdatePlayerPanel(player1.attributes, player2.attributes);
+        uiController.UpdatePlayerPanel(player1.GetAttributes(), player2.GetAttributes());
         #region Check Player Click
         if ( Input.GetMouseButtonDown(0) ) {
             Ray ray = Camera.main.ScreenPointToRay( Input.mousePosition );
@@ -62,12 +54,12 @@ public class GameController : MonoBehaviour
     // Spawn the players in the board
     void SpawnPlayers() {
         // Spawn player 1
-        GameObject go1 = Instantiate(player1Prefab);
+        GameObject go1 = Instantiate(Resources.Load<GameObject>(StaticData.Player1Prefab));
         player1 = go1.GetComponent<Player>();
         player1.Spawn(Board.Instance.GetRandomSquare().GetComponent<Square>(), PlayerIndex.Player1);
         player1.ActionMove += uiController.UpdateMovesLeft;
         // Spawn player 2
-        GameObject go2 = Instantiate(player2Prefab);
+        GameObject go2 = Instantiate(Resources.Load<GameObject>(StaticData.Player2Prefab));
         player2 = go2.GetComponent<Player>();
         player2.Spawn(Board.Instance.GetRandomSquare().GetComponent<Square>(), PlayerIndex.Player2);
         player2.ActionMove += uiController.UpdateMovesLeft;
