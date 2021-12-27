@@ -305,7 +305,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   squarePrefab: {fileID: 3907823052007299945, guid: a4c0083d2a1745c44be7cf90ef7ccbe5,
     type: 3}
-  cellSize: 4
+  cellSize: 16
 --- !u!4 &72784604
 Transform:
   m_ObjectHideFlags: 0
